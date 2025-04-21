@@ -1,0 +1,65 @@
+import React, { useState, useEffect } from 'react';
+import Endpoint from '../Endpoint'; // Adjust the import path based on your file structure
+import service from '../../Services/api'
+
+
+
+function EndpointsTable() {
+
+  const [urls, setUrls] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchAddressList = async () => {
+      setIsLoading(true);
+      setError(null);
+
+      try {
+       
+        const response = await service.getUrlConfiguration();
+        console.log("config urls",response)
+        setUrls(response); 
+
+      } catch (err) {
+        debugger;
+        console.error("Failed to fetch address listXXXXXXXXXXX:", err);
+        setError(err.message || 'Failed to fetch the list of addresses');
+        setUrls([]); // Clear URLs on error
+      } finally {
+        setIsLoading(false); // Done loading the list
+      }
+    };
+
+    fetchAddressList();
+
+  }, []);
+
+
+  if (isLoading) {
+    return <div>Loading service addresses...</div>;
+  }
+
+  if (error) {
+    return <div style={{ color: 'red' }}>Error loading addresses: {error}</div>;
+  }
+
+  if (urls.length === 0) {
+    return <div>No service addresses found or returned from the API.</div>;
+  }
+
+  return (
+    <div className="address-table-container"> {/* Optional wrapper */}
+      <h2>Service Status Dashboard</h2>
+      <div className="endpoint-list">
+        {urls && urls.map((addressUrl, index) => (
+          <div key={addressUrl || index} className="endpoint-item" style={{ borderBottom: '1px solid #eee', marginBottom: '15px', paddingBottom: '15px' }}>
+            <Endpoint url={addressUrl} />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export default EndpointsTable;

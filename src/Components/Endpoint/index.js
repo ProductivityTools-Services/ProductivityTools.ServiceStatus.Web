@@ -20,15 +20,9 @@ function Endpoint({url}) {
             try {
                 
                 const response = await service.call(url);
-
-                // Check if the response was successful (status code 200-299)
-                if (!response.ok) {
-                    throw new Error(`HTTP error! Status: ${response.status}`);
-                }
-
-                const data = await response.json();
-
-                setServerStatus(data);
+                
+               
+                setServerStatus(response);
 
             } catch (err) {
                 console.error("Failed to fetch server status:", err);
@@ -43,7 +37,10 @@ function Endpoint({url}) {
     }, []);
 
     return (
-        <span>hello</span>
+        <div>
+        <span>hello, serverstatus:</span>
+        <span>{serverStatus}</span>
+        </div>
     ); 
 }
 
