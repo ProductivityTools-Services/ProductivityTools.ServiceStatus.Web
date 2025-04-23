@@ -5,6 +5,8 @@ import service from '../../Services/api'
 
 function Endpoint({url}) {
 
+    console.log("Endpoint Url:", url)
+
     const [serverStatus, setServerStatus] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -13,15 +15,14 @@ function Endpoint({url}) {
 
 
 
-        const fetchServerStatus = async () => {
+        const fetchServerStatus = async (callUrl) => {
             setIsLoading(true); // Set loading state before starting the fetch
             setError(null);     // Clear any previous errors
 
             try {
                 
-                const response = await service.call(url);
-                
-               
+                const response = await service.call(callUrl);
+                console.log("ServerStatus",response);
                 setServerStatus(response);
 
             } catch (err) {
@@ -32,8 +33,8 @@ function Endpoint({url}) {
                 setIsLoading(false); // Set loading state to false
             }
         };
-
-        fetchServerStatus();
+        var dateUrl=`https://${url}/api/debug/date`
+        fetchServerStatus(dateUrl);
     }, []);
 
     return (

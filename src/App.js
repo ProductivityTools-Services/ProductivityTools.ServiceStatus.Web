@@ -9,7 +9,7 @@ function App() {
 
       </header>
         hello
-        <Endpoint url="https://trips-api.productivitytools.top/api/debug/date"></Endpoint>
+        {/* <Endpoint url="https://trips-api.productivitytools.top/api/debug/date"></Endpoint> */}
         <EndpointsTable></EndpointsTable>
     </div>
   );
