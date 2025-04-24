@@ -7,13 +7,14 @@ function Endpoint({url}) {
 
     console.log("Endpoint Url:", url)
 
-    const [serverStatus, setServerStatus] = useState(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState(null);
 
+    const [dbInstanceName, setDbInstanceName] = useState(null);
+    const [appName, setAppName] = useState(null);
+    const [date, setDate] = useState(null);
+
     useEffect(() => {
-
-
 
         const fetchServerStatus = async (callUrl) => {
             setIsLoading(true); // Set loading state before starting the fetch
@@ -21,26 +22,54 @@ function Endpoint({url}) {
 
             try {
                 
-                const response = await service.call(callUrl);
-                console.log("ServerStatus",response);
-                setServerStatus(response);
+                const appName = await service.getAppName(url);
+                const dbInstanceName = await service.getDbInstanceName(url);
+                const date = await service.getDate(url);
+                console.log("ServerStatus",appName,dbInstanceName,date)
+                setAppName(appName);
+                setDbInstanceName(dbInstanceName);
+                setDate(date);
 
             } catch (err) {
                 console.error("Failed to fetch server status:", err);
                 setError(err.message || 'Failed to fetch data'); // Store the error message
-                setServerStatus(null); // Optionally reset status on error
             } finally {
                 setIsLoading(false); // Set loading state to false
             }
         };
-        var dateUrl=`https://${url}/api/debug/date`
-        fetchServerStatus(dateUrl);
+        fetchServerStatus(url);
     }, []);
 
     return (
         <div>
-        <span>hello, serverstatus:</span>
-        <span>{serverStatus}</span>
+            <table>
+                <thead>
+                    <tr>
+                        <th>
+                            Service
+                        </th>
+                        <th>
+                            ServerName
+                        </th>
+                        <th>
+                            Date
+                        </th>
+                        </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            {appName}
+                        </td>
+                        <td>
+                            {dbInstanceName}
+                        </td>
+                        <td>
+                            {date}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     ); 
 }
