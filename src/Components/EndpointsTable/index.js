@@ -16,10 +16,10 @@ function EndpointsTable() {
       setError(null);
 
       try {
-       
+
         const response = await service.getUrlConfiguration();
-        console.log("config urls",response)
-        setServiceConfig(response); 
+        console.log("config urls", response)
+        setServiceConfig(response);
 
       } catch (err) {
         console.error("Failed to fetch address listXXXXXXXXXXX:", err);
@@ -50,11 +50,35 @@ function EndpointsTable() {
   return (
     <div className="address-table-container"> {/* Optional wrapper */}
       <h2>Service Status Dashboard</h2>
-        {serviceConfig && serviceConfig.map((config, index) => (
-          <div key={config.Address || index} className="endpoint-item" style={{ borderBottom: '1px solid #eee', marginBottom: '15px', paddingBottom: '15px' }}>
-            <Endpoint url={config.Address} />
-          </div>
-        ))}
+
+      <table>
+        <thead>
+          <tr>
+            <th>Category</th>
+            <th>
+              Service
+            </th>
+            <th>
+              ServerName
+            </th>
+            <th>
+              Date
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {serviceConfig && serviceConfig.map((config, index) => (
+            <Endpoint key={config.Address || index} config={config} />
+          ))}
+        </tbody>
+      </table>
+
+
+      {/* {serviceConfig && serviceConfig.map((config, index) => (
+        <div key={config.Address || index} className="endpoint-item" style={{ borderBottom: '1px solid #eee', marginBottom: '15px', paddingBottom: '15px' }}>
+          <Endpoint config={config} />
+        </div>
+      ))} */}
     </div>
   );
 }

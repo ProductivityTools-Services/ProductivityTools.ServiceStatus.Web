@@ -9,7 +9,7 @@ async function call(url) {
 
 async function getDate(url) {
     let dateUrl=`https://${url}/api/debug/date`
-    const response = await axios.get(url)
+    const response = await axios.get(dateUrl)
     return response.data;
 }
 
