@@ -8,37 +8,71 @@ function Endpoint({ config }) {
     console.log("Endpoint Url:", config)
 
     const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState(null);
 
     const [dbInstanceName, setDbInstanceName] = useState(null);
+    const [dbInstanceNameError, setDbInstanceNameError] = useState(null);
     const [appName, setAppName] = useState(null);
+    const [appNameError, setappNameError] = useState(null);
     const [date, setDate] = useState(null);
+    const [dateError, setdateError] = useState(null);
+
 
     useEffect(() => {
 
-        const fetchServerStatus = async () => {
-            setIsLoading(true); // Set loading state before starting the fetch
-            setError(null);     // Clear any previous errors
-            console.log("fetchServerStatus", config.Address)
+        setDbInstanceNameError(null);
+        setappNameError(null);
+        setdateError(null);
+        const fetchDbInstanceName = async () => {
+            try {
+
+                const dbInstanceName = await service.getDbInstanceName(config.Address);
+                setDbInstanceName(dbInstanceName);
+
+            } catch (err) {
+                console.error("Failed to fetch server status:", err);
+                setDbInstanceNameError(err.message + ' ' + err.name || 'Failed to fetch data'); // Store the error message
+            }
+        }
+        const fetchAppName = async () => {
             try {
 
                 const appName = await service.getAppName(config.Address);
-                const dbInstanceName = await service.getDbInstanceName(config.Address);
-                const date = await service.getDate(config.Address);
-                console.log("ServerStatus", appName, dbInstanceName, date)
                 setAppName(appName);
-                setDbInstanceName(dbInstanceName);
+
+            } catch (err) {
+                console.error("Failed to fetch server status:", err);
+                setappNameError(err.message + ' ' + err.name || 'Failed to fetch data'); // Store the error message
+            }
+        }
+        const fetchDate = async () => {
+            try {
+
+                const date = await service.getDate(config.Address);
                 setDate(date);
 
             } catch (err) {
                 console.error("Failed to fetch server status:", err);
-                setError(err.message || 'Failed to fetch data'); // Store the error message
-            } finally {
-                setIsLoading(false); // Set loading state to false
+                setdateError(err.message + ' ' + err.name || 'Failed to fetch data'); // Store the error message
             }
-        };
-        fetchServerStatus();
+        }
+
+        fetchDbInstanceName();
+        fetchAppName();
+        fetchDate();
     }, []);
+
+    const getClassName = (error, config, serverValue) => {
+        if (error) {
+            return 'error'
+        }
+        if (config == serverValue) {
+            return 'green'
+        }
+    }
+
+    const getCurerntDate = () => {
+        return new Date().toJSON().slice(0, 16).replace(/-/g, '.');
+    }
 
     return (
         <>
@@ -46,28 +80,28 @@ function Endpoint({ config }) {
                 <td>
                     Configuration
                 </td>
-                <td>
+                <td className={getClassName(appNameError, config.Service, appName)}>
                     {config.Service}
                 </td>
-                <td>
+                <td className={getClassName(appNameError, config.Server, dbInstanceName)}>
                     {config.Server}
                 </td>
-                <td>
-                    {new Date().toJSON().slice(0, 16).replace(/-/g, '.')}
+                <td className={getClassName(dateError,null,null)}>
+                    {getCurerntDate()}
                 </td>
             </tr>
             <tr>
                 <td>
                     HealthCheck
                 </td>
-                <td>
-                    {appName}
+                <td className={getClassName(appNameError, config.Service, appName)}>
+                    {appNameError ?? appName}
                 </td>
-                <td>
-                    {dbInstanceName}
+                <td className={getClassName(dbInstanceNameError)}>
+                    {dbInstanceNameError ?? dbInstanceName}
                 </td>
-                <td>
-                    {date}
+                <td className={getClassName(dateError,null,null)}>
+                    {dateError ?? date}
                 </td>
             </tr>
         </>

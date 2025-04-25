@@ -51,7 +51,7 @@ function EndpointsTable() {
     <div className="address-table-container"> {/* Optional wrapper */}
       <h2>Service Status Dashboard</h2>
 
-      <table>
+      <table  class="blueTable">
         <thead>
           <tr>
             <th>Category</th>
@@ -72,13 +72,6 @@ function EndpointsTable() {
           ))}
         </tbody>
       </table>
-
-
-      {/* {serviceConfig && serviceConfig.map((config, index) => (
-        <div key={config.Address || index} className="endpoint-item" style={{ borderBottom: '1px solid #eee', marginBottom: '15px', paddingBottom: '15px' }}>
-          <Endpoint config={config} />
-        </div>
-      ))} */}
     </div>
   );
 }
