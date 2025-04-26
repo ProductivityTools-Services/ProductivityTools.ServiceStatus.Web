@@ -77,23 +77,22 @@ function Endpoint({ config }) {
     return (
         <>
             <tr>
-                <td>
-                    Configuration
+                <td rowSpan={2}>
+                    {config.rr}
                 </td>
+                <td>Sheet</td>
                 <td className={getClassName(appNameError, config.Service, appName)}>
                     {config.Service}
                 </td>
-                <td className={getClassName(appNameError, config.Server, dbInstanceName)}>
-                    {config.Server}
+                <td className={getClassName(appNameError, config.DbInstanceName, dbInstanceName)}>
+                    {config.DbInstanceName}
                 </td>
                 <td className={getClassName(dateError,null,null)}>
                     {getCurerntDate()}
                 </td>
             </tr>
             <tr>
-                <td>
-                    HealthCheck
-                </td>
+                <td>Server</td>
                 <td className={getClassName(appNameError, config.Service, appName)}>
                     {appNameError ?? appName}
                 </td>

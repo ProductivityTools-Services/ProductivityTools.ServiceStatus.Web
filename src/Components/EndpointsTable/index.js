@@ -54,12 +54,15 @@ function EndpointsTable() {
       <table  class="blueTable">
         <thead>
           <tr>
-            <th>Category</th>
+            <th>Service</th>
+            <th>
+              Category
+            </th>
             <th>
               Service
             </th>
             <th>
-              ServerName
+              SQLInstanceName
             </th>
             <th>
               Date
