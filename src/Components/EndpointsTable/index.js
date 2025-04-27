@@ -51,7 +51,7 @@ function EndpointsTable() {
     <div className="address-table-container"> {/* Optional wrapper */}
       <h2>Service Status Dashboard</h2>
 
-      <table  class="blueTable">
+      <table class="blueTable">
         <thead>
           <tr>
             <th>Service</th>
@@ -70,7 +70,7 @@ function EndpointsTable() {
           </tr>
         </thead>
         <tbody>
-          {serviceConfig && serviceConfig.map((config, index) => (
+          {serviceConfig && serviceConfig.filter(x => x.Service != null).map((config, index) => (
             <Endpoint key={config.Address || index} config={config} />
           ))}
         </tbody>

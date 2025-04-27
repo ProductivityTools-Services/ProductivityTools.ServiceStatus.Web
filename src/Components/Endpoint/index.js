@@ -1,11 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from 'react'
 import service from '../../Services/api'
+import moment from 'moment';
+
 
 
 function Endpoint({ config }) {
 
-    console.log("Endpoint Url:", config)
 
     const [isLoading, setIsLoading] = useState(true);
 
@@ -71,7 +72,18 @@ function Endpoint({ config }) {
     }
 
     const getCurerntDate = () => {
-        return new Date().toJSON().slice(0, 16).replace(/-/g, '.');
+        return new Date().toJSON().slice(0, 16).replace(/-/g, '.').replace('T', ' ');;
+    }
+
+    const parseDate = (date) => {
+        if (date) {
+            const date3 = moment(date, 'DD.MM.YYYY HH:mm:SS').toDate();
+            
+            return date3.toJSON().slice(0, 16).replace(/-/g, '.').replace('T', ' ');
+        }
+        else {
+            return "waiting"
+        }
     }
 
     return (
@@ -87,7 +99,7 @@ function Endpoint({ config }) {
                 <td className={getClassName(appNameError, config.DbInstanceName, dbInstanceName)}>
                     {config.DbInstanceName}
                 </td>
-                <td className={getClassName(dateError,null,null)}>
+                <td className={getClassName(dateError, null, null)}>
                     {getCurerntDate()}
                 </td>
             </tr>
@@ -99,8 +111,8 @@ function Endpoint({ config }) {
                 <td className={getClassName(dbInstanceNameError)}>
                     {dbInstanceNameError ?? dbInstanceName}
                 </td>
-                <td className={getClassName(dateError,null,null)}>
-                    {dateError ?? date}
+                <td className={getClassName(dateError, null, null)}>
+                    {dateError ?? parseDate(date)}
                 </td>
             </tr>
         </>
