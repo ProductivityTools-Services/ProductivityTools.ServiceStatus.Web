@@ -16,6 +16,7 @@ function Endpoint({ config }) {
     const [appNameError, setappNameError] = useState(null);
     const [date, setDate] = useState(null);
     const [dateError, setdateError] = useState(null);
+    const [reloader,setReloader]=useState(0);
 
 
     useEffect(() => {
@@ -23,6 +24,7 @@ function Endpoint({ config }) {
         setDbInstanceNameError(null);
         setappNameError(null);
         setdateError(null);
+
         const fetchDbInstanceName = async () => {
             try {
 
@@ -60,7 +62,7 @@ function Endpoint({ config }) {
         fetchDbInstanceName();
         fetchAppName();
         fetchDate();
-    }, []);
+    }, [reloader]);
 
     const getClassName = (error, config, serverValue) => {
         if (error) {
@@ -85,6 +87,9 @@ function Endpoint({ config }) {
             return "waiting"
         }
     }
+    const reload=(config)=>{
+        setReloader(reloader+1);
+    }
 
     return (
         <>
@@ -102,6 +107,8 @@ function Endpoint({ config }) {
                 <td className={getClassName(dateError, null, null)}>
                     {getCurerntDate()}
                 </td>
+                <td><button onClick={()=>reload(config)}>Reload</button></td>
+                
             </tr>
             <tr>
                 <td>Server</td>
@@ -114,6 +121,7 @@ function Endpoint({ config }) {
                 <td className={getClassName(dateError, null, null)}>
                     {dateError ?? parseDate(date)}
                 </td>
+                <td><button onClick={()=>reload(config)}>Reload</button></td>
             </tr>
         </>
     );
